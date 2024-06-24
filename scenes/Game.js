@@ -4,12 +4,12 @@ export default class Game extends Phaser.Scene {
   constructor() {
     // key of the scene
     // the key will be used to start the scene by other scenes
-    super("main");
+    super("Game");
   }
 
   init() {
     this.gameOver = false;
-    this.timer = 30;
+    this.timer = 10;
     this.score = 0;
     this.shapes = {
       rainbow: { points: 10, count: 0 },
@@ -17,6 +17,7 @@ export default class Game extends Phaser.Scene {
       animal: { points: 30, count: 0 },
       boy: { points: -10, count: 0 },
     };
+    this.isClicked = false;
   }
 
   preload() {
@@ -29,6 +30,8 @@ export default class Game extends Phaser.Scene {
     this.load.image("animal", "../public/assets/piñata02.png");
     this.load.image("star", "../public/assets/piñata03.png");
     this.load.image("boy", "../public/assets/nene01.png");
+    this.load.image("mira","../public/assets/mira.png");
+
   }
 
   create() {
@@ -39,23 +42,24 @@ export default class Game extends Phaser.Scene {
 
     this.platform = this.physics.add.staticGroup();
     this.platform.create(400, 568, "platform").setScale(4).refreshBody();
-    this.platform.create(100, 350, "platform");
-    this.platform.create(1000, 350, "platform");
 
     this.girl = this.physics.add.sprite(400, 300, "girl");
     this.girl.setCollideWorldBounds(true);
+
+    this.mira = this.physics.add.sprite(400,400, "mira");
+    this.pointer = this.input.activePointer;
+    this.mira.setScale(0.2)
 
     this.physics.add.collider(this.girl, this.platform);
 
     this.collectable = this.physics.add.group();
 
-    //this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    //this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    //this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    //this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-    //crear teclas
-    this.cursor = this.input.keyboard.createCursorKeys();
+    
+    //this.cursor = this.input.keyboard.createCursorKeys();
 
     this.time.addEvent({
       delay: 1000,
@@ -65,11 +69,7 @@ export default class Game extends Phaser.Scene {
     });
 
     //reconocimiento del mov del mouse
-    //this.pointer = this.input.activePointer;
-
-    //se mueve la mira con el mouse
-    //this.mira.x = this.pointer.x;
-    //this.mira.y = this.pointer.y;
+    this.pointer = this.input.activePointer;
 
     // evento 1 segundo
     this.time.addEvent({
@@ -100,7 +100,15 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    // collider entre recolectables y plataformas
+    this.physics.add.overlap(
+      this.mira,
+      this.collectable,
+      this.onShapeCollect,
+      null,
+      this
+    );
+
+    //collider entre recolectables y plataformas
     this.physics.add.collider(
       this.collectable,
       this.platform,
@@ -108,6 +116,7 @@ export default class Game extends Phaser.Scene {
       null,
       this
     );
+
   }
 
   update() {
@@ -119,39 +128,27 @@ export default class Game extends Phaser.Scene {
       this.timerText.setText("Game Over");
       return;
     }
+
     // movimiento personaje
-    if (this.cursor.left.isDown) {
+    if (this.a.isDown) {
       this.girl.setVelocityX(-160);
-    } else if (this.cursor.right.isDown) {
+    } else if (this.d.isDown) {
       this.girl.setVelocityX(160);
     } else {
       this.girl.setVelocityX(0);
     }
-    if (this.cursor.up.isDown && this.girl.body.touching.down) {
+    if (this.w.isDown && this.girl.body.touching.down) {
       this.girl.setVelocityY(-330);
     }
+
+    //se mueve la mira con el mouse
+    this.mira.x = this.pointer.x;
+    this.mira.y = this.pointer.y;
+
+    if (!this.pointer.isDown) {
+      this.isClicked = false;
+    }
   }
-
-  //Recolect(_mira, collectable){
-    //if (this.pointer.isDowm){
-    //const nombreFig = collectable.getData("tipo");
-    //  const puntosFig = collectable.getData("points")
-
-    //  this.score += puntosFig;
-      //const points = collectable.getData("points");
-
-      //this.shapes [nombreFig].count += 1;
-
-//      console.table(this.shapes);
-  //    console-log("score", this.score);
-
-    //  this.textScore.setText(
-      //  `${this.score}`)
-      
-     // collectable.destroy()
-
-    //}
- // }
 
   onSecond() {
     if (this.gameOver) {
@@ -176,34 +173,41 @@ export default class Game extends Phaser.Scene {
     collectable.setData("tipo", tipo);
   }
 
-  onShapeCollect(girl, collectable) {
+  onShapeCollect(mira, collectable) {
+    if (this.pointer.isDown && !this.isClicked) {
     const nombreFig = collectable.getData("tipo");
     const points = collectable.getData("points");
 
-    this.score += points;
+    if (nombreFig == "boy") {
+      console.log("guri")
+    }
+    else {
+      this.score += points;
 
     this.shapes[nombreFig].count += 1;
 
     console.table(this.shapes);
     console.log("recolectado ", collectable.texture.key, points);
     console.log("score ", this.score);
-    collectable.destroy();
-    //recolectable.disableBody(true, true);
 
+    collectable.destroy();
     this.scoreText.setText(
-      `Puntaje: ${this.score}
-        T: ${this.shapes["rainbow"].count}
-        C: ${this.shapes["animal"].count}
-        R: ${this.shapes["star"].count}`
+      `Puntaje: ${this.score}`
     );
+    }
+    
+    this.isClicked = true;
+    }
   }
+
+
 
   handlerTimer() {
     this.timer -= 1;
     this.timerText.setText(`tiempo restante: ${this.timer}`);
     if (this.timer === 0) {
       this.gameOver = true;
-      this.scene.start("end", {
+      this.scene.start("End", {
         score: this.score,
         gameOver: this.gameOver,
       });
@@ -213,10 +217,22 @@ export default class Game extends Phaser.Scene {
   onRecolectableBounced(collectable, platform) {
     console.log("recolectable rebote");
     let points = collectable.getData("points");
-    points -= 5;
+    const nombreFig = collectable.getData("tipo");
+    if (nombreFig == "boy") {
+      if (collectable.x > this.girl.x) {
+        collectable.setVelocityX(-160);
+      }
+      else {
+        collectable.setVelocityX(160);
+      }
+    }
+    else {
+      points -= 5;
     collectable.setData("points", points);
     if (points <= 0) {
       collectable.destroy();
     }
+    }
+    
   }
 }

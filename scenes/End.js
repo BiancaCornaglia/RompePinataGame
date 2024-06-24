@@ -1,6 +1,6 @@
 export default class End extends Phaser.Scene {
     constructor() {
-        super("end");
+        super("End");
     }
     init(data) {
         this.score = data.score || 0;
@@ -8,7 +8,7 @@ export default class End extends Phaser.Scene {
     }
     create() {
         this.add
-        .text(400, 300, this.gameOver ? "Game Over" : "You Win", {
+        .text(600, 300, this.gameOver ? "Game Over" : "You Win", {
             fontSize: "40px",
             color: "#ffffff",
         })
@@ -21,7 +21,7 @@ export default class End extends Phaser.Scene {
 
     update() {
         if (this.r.isDown) {
-            this.scene.start("main");
+            this.scene.start("Game");
         }
     }
 }

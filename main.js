@@ -1,3 +1,4 @@
+
 import Game from "./scenes/Game.js";
 import End from "./scenes/End.js";
 

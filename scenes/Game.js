@@ -22,16 +22,9 @@ export default class Game extends Phaser.Scene {
   preload() {
    //cargar assets
 
-    //import Cielo
     this.load.image("sky", "../public/assets/Cielo.webp");
-
-    //import plataforma
     this.load.image("platform", "../public/assets/platform.png");
-
-    //import personaje
     this.load.image("girl", "../public/assets/pj04.png");
-
-    // importar recolectable
     this.load.image("rainbow", "../public/assets/piñata01.png");
     this.load.image("animal", "../public/assets/piñata02.png");
     this.load.image("star", "../public/assets/piñata03.png");
@@ -40,38 +33,30 @@ export default class Game extends Phaser.Scene {
 
   create() {
     // crear elementos
+
     this.sky = this.add.image(550, 300, "sky");
-    this.sky.setScale(2);
+    this.sky.setScale(3);
 
-    // crear grupa plataformas
     this.platform = this.physics.add.staticGroup();
-    // al grupo de plataformas agregar una plataforma
-    this.platform.create(400, 568, "platform").setScale(2).refreshBody();
-    // agregamos otra plataforma en otro lugar
-    this.platform.create(20, 400, "platform");
+    this.platform.create(400, 568, "platform").setScale(4).refreshBody();
+    this.platform.create(100, 350, "platform");
+    this.platform.create(1000, 350, "platform");
 
-    this.platform.create(800, 400, "platform");
-
-    //crear personaje
     this.girl = this.physics.add.sprite(400, 300, "girl");
-    //this.personaje.setScale(0.1);
     this.girl.setCollideWorldBounds(true);
 
-    //agregar colision entre personaje y plataforma
     this.physics.add.collider(this.girl, this.platform);
-    //una tecla a la vez
+
+    this.collectable = this.physics.add.group();
+
     //this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     //this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     //this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     //this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-
+    this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     //crear teclas
     this.cursor = this.input.keyboard.createCursorKeys();
 
-    // crear grupo recolectables
-    this.collectable = this.physics.add.group();
-
-    // evento 1 segundo
     this.time.addEvent({
       delay: 1000,
       callback: this.onSecond,
@@ -79,8 +64,12 @@ export default class Game extends Phaser.Scene {
       loop: true,
     });
 
-    // add tecla r
-    this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+    //reconocimiento del mov del mouse
+    //this.pointer = this.input.activePointer;
+
+    //se mueve la mira con el mouse
+    //this.mira.x = this.pointer.x;
+    //this.mira.y = this.pointer.y;
 
     // evento 1 segundo
     this.time.addEvent({
@@ -90,7 +79,7 @@ export default class Game extends Phaser.Scene {
       loop: true,
     });
 
-    //agregar texto de timer en la esquina superior derecha
+    //agregar texto de timer
     this.timerText = this.add.text(10, 10, `tiempo restante: ${this.timer}`, {
       fontSize: "32px",
       fill: "#fff",
@@ -99,13 +88,10 @@ export default class Game extends Phaser.Scene {
     this.scoreText = this.add.text(
       10,
       50,
-      `Puntaje: ${this.score}
-        T: ${this.shapes["rainbow"].count}
-        C: ${this.shapes["star"].count}
-        R: ${this.shapes["animal"].count}`
+      `Puntaje: ${this.score}`
     );
 
-    //agregar collider entre recolectables y personaje
+    //collider entre recolectables y personaje
     this.physics.add.collider(
       this.girl,
       this.collectable,
@@ -114,7 +100,7 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    //agregar collider entre recolectables y plataformas
+    // collider entre recolectables y plataformas
     this.physics.add.collider(
       this.collectable,
       this.platform,
@@ -145,11 +131,33 @@ export default class Game extends Phaser.Scene {
       this.girl.setVelocityY(-330);
     }
   }
+
+  //Recolect(_mira, collectable){
+    //if (this.pointer.isDowm){
+    //const nombreFig = collectable.getData("tipo");
+    //  const puntosFig = collectable.getData("points")
+
+    //  this.score += puntosFig;
+      //const points = collectable.getData("points");
+
+      //this.shapes [nombreFig].count += 1;
+
+//      console.table(this.shapes);
+  //    console-log("score", this.score);
+
+    //  this.textScore.setText(
+      //  `${this.score}`)
+      
+     // collectable.destroy()
+
+    //}
+ // }
+
   onSecond() {
     if (this.gameOver) {
       return;
     }
-    // crear recolectable
+
     const tipos = ["rainbow", "animal", "star", "boy"];
 
     const tipo = Phaser.Math.RND.pick(tipos);
@@ -162,7 +170,6 @@ export default class Game extends Phaser.Scene {
 
     //asignar rebote: busca un numero entre 0.4 y 0.8
     const rebote = Phaser.Math.FloatBetween(0.4, 0.8);
-    collectable.setBounce(rebote);
 
     //set data
     collectable.setData("points", this.shapes[tipo].points);
@@ -189,24 +196,6 @@ export default class Game extends Phaser.Scene {
         C: ${this.shapes["animal"].count}
         R: ${this.shapes["star"].count}`
     );
-
-    this.checkWin();
-  }
-
-  checkWin() {
-    const cumplePuntos = this.score >= 100;
-    const cumpleFiguras =
-      this.shapes["rainbow"].count >= 2 &&
-      this.shapes["animal"].count >= 2 &&
-      this.shapes["star"].count >= 2;
-
-    if (cumplePuntos && cumpleFiguras) {
-      console.log("Ganaste");
-      this.scene.start("end", {
-        score: this.score,
-        gameOver: this.gameOver,
-      });
-    }
   }
 
   handlerTimer() {

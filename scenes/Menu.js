@@ -1,13 +1,13 @@
 export default class Menu extends Phaser.Scene {
     constructor() {
-    super("Menu");
+        super("Menu");
     }
 
-    init(){
+    init() {
 
     }
 
-    preload(){
+    preload() {
         this.load.image("inicio", " ./public/assets/phaser3-logo.png")
         this.load.image("sky", "./public/assets/Cielo.webp");
         this.load.image("platform", "./public/assets/platform.png");
@@ -25,7 +25,7 @@ export default class Menu extends Phaser.Scene {
         this.load.image("num3", "./public/assets/num3.png");
     }
 
-    create(){
+    create() {
         //this.pointer = this.input.activePointer;
         //this.Inicio()
 
@@ -33,13 +33,13 @@ export default class Menu extends Phaser.Scene {
 
         this.input.on("pointerdown", this.Inicio, this)
 
-        this.add.text(500, 400, "TOCA Y JUGA",{
+        this.add.text(500, 400, "TOCA Y JUGA", {
             fontSize: "45px",
             color: "#fff"
         })
     }
 
-    Inicio(pointer){
+    Inicio(pointer) {
         //if (this.pointer.isDown) {
         this.scene.start("Game")
         //}

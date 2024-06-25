@@ -8,11 +8,11 @@ export default class End extends Phaser.Scene {
     }
     create() {
         this.add
-        .text(600, 300, this.gameOver ? "Game Over" : "You Win", {
-            fontSize: "40px",
-            color: "#ffffff",
-        })
-        .setOrigin(0.5);
+            .text(600, 300, this.gameOver ? "Game Over" : "You Win", {
+                fontSize: "40px",
+                color: "#ffffff",
+            })
+            .setOrigin(0.5);
 
         this.add.text(400, 350, `Score: ${this.score}`);
 

@@ -1,9 +1,5 @@
-// URL to explain PHASER scene: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/scene/
-
 export default class Game extends Phaser.Scene {
   constructor() {
-    // key of the scene
-    // the key will be used to start the scene by other scenes
     super("Game");
   }
 
@@ -219,11 +215,15 @@ export default class Game extends Phaser.Scene {
     let points = collectable.getData("points");
     const nombreFig = collectable.getData("tipo");
     if (nombreFig == "boy") {
-      if (collectable.x > this.girl.x) {
-        collectable.setVelocityX(-160);
-      }
+      console.log("mama");
+      if (collectable.x > this.girl.x) 
+        {
+          collectable.setVelocityX(-160);
+          collectable = !this.collectable;
+        }
       else {
         collectable.setVelocityX(160);
+        collectable = !this.collectable;
       }
     }
     else {

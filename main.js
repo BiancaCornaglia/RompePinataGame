@@ -18,13 +18,13 @@ const config = {
     },
     max: {
       width: 1600,
-      height: 1200,
+      height: 900,
     },
   },
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 },
+      gravity: { y: 0 },
       debug: true,
     },
   },

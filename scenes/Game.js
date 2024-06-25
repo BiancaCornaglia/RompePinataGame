@@ -75,10 +75,12 @@ export default class Game extends Phaser.Scene {
     //collider entre recolectables y personaje
     this.physics.add.overlap(this.girl,this.collectable,this.onGirlCollision,null,this);
 
-    this.physics.add.overlap(this.girl,this.candy,this.GirlCandyCollision,null,this);
-
-    this.physics.add.overlap(this.mira,this.collectable,this.onShapeCollect,null,this);
-
+    this.physics.add.overlap(this.girl, this.candy, this.GirlCandyCollision, null, this);
+    
+    //overlap entre collectable y mira
+    this.physics.add.overlap(this.mira, this.collectable, this.onShapeCollect, null, this);
+    
+    //overlap entre caramelos y nenes
     this.physics.add.overlap(this.candy,this.collectable,this.boyCollectsCandy,null,this);
 
     //collider entre recolectables y plataformas

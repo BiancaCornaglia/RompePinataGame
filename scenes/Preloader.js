@@ -20,4 +20,11 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("num2", "./public/assets/num2.png");
         this.load.image("num3", "./public/assets/num3.png");
     }
+
+    create()
+    {
+        setTimeout, () => this.scene.start("MainMenu", {}, 1000);
+    }
+    
+
 }

@@ -8,10 +8,10 @@ export default class Menu extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image("inicio", " ../public/assets/phaser3-logo.png")
+        this.load.image("inicio", " ./public/assets/phaser3-logo.png")
         this.load.image("sky", "./public/assets/Cielo.webp");
         this.load.image("platform", "./public/assets/platform.png");
-        this.load.image("girl", "../public/assets/pj04.png");
+        this.load.image("girl", "./public/assets/pj04.png");
         this.load.image("rainbow", "./public/assets/piñata01.png");
         this.load.image("animal", "./public/assets/piñata02.png");
         this.load.image("star", "./public/assets/piñata03.png");

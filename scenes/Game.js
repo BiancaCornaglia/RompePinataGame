@@ -8,17 +8,17 @@ export default class Game extends Phaser.Scene {
     this.timer = 50;
     this.score = 0;
     this.shapes = {
-      num1: { points: 10 },
-      num2: { points: 20 },
-      num3: { points: 30 },
+      num1: { points: 0 },
+      num2: { points: 0 },
+      num3: { points: 0 },
       boy: { points: -20 },
     };
     this.isClicked = false;
-    //this.candys = {
-    //  candy1: { points: 10 },
-    //  candy2: { points: 20 },
-    //  candy3: { points: 30 },
-    //};
+    this.candys = {
+      candy1: { points: 30 },
+      candy2: { points: 20 },
+      candy3: { points: 10 },
+    };
   }
 
   create() {
@@ -166,6 +166,16 @@ export default class Game extends Phaser.Scene {
         this.cooldown = 0;
       }
     }
+    if (this.timer > 50) {
+      this.timer = 50;
+      this.timerText.setText(`tiempo restante: ${this.timer}`);
+    }
+    if (this.gameOver) {
+      this.scene.start("End", {
+        score: this.score,
+        gameOver: this.gameOver,
+      });
+    }
   }
 
   onSecond() {
@@ -208,6 +218,11 @@ export default class Game extends Phaser.Scene {
         this.scoreText.setText(`Puntaje: ${this.score}`);
         this.timer = this.timer - 10;
         this.timerText.setText(`tiempo restante: ${this.timer}`);
+        if (this.timer <= 0) {
+          this.timer = 0;
+          this.timerText.setText(`tiempo restante: ${this.timer}`);
+          this.gameOver = true;
+        }
       } else {
         if (collectable.getData("hp") == "3") {
           collectable.setData("hp", 2);
@@ -218,13 +233,12 @@ export default class Game extends Phaser.Scene {
         } else if (collectable.getData("hp") == "1") {
           collectable.setData("hp", 0);
           collectable.destroy();
-          this.score += points
-          this.scoreText.setText(`Puntaje: ${this.score}`);
           const candyList = ["candy1", "candy2", "candy3"];
           const candyNum = Phaser.Math.RND.pick(candyList);
           let candy = this.candy.create(collectable.x, collectable.y, candyNum);
           candy.setVelocity(0, 350);
           candy.setScale(0.2);
+          candy.setData("points", this.candys[candyNum].points);
         }
       }
 
@@ -236,11 +250,8 @@ export default class Game extends Phaser.Scene {
     this.timer -= 1;
     this.timerText.setText(`tiempo restante: ${this.timer}`);
     if (this.timer <= 0) {
+      this.timer = 0;
       this.gameOver = true;
-      this.scene.start("End", {
-        score: this.score,
-        gameOver: this.gameOver,
-      });
     }
   }
 
@@ -269,6 +280,8 @@ export default class Game extends Phaser.Scene {
       this.cooling = true;
       if (this.timer <= 0) {
         this.gameOver = true;
+        this.timer = 0;
+        this.timerText.setText(`tiempo restante: ${this.timer}`);
       }
     } else {
       //no pasa nada, ya los desaparece el piso
@@ -276,9 +289,9 @@ export default class Game extends Phaser.Scene {
   }
 
   GirlCandyCollision(timer, candy) {
-    //candy.setData("points", this.candys[candyNum].points);
-    //candy.setData("candyNum", candyNum);
-    //this.score += points;
+    const points = candy.getData("points");
+    this.score += points
+    this.scoreText.setText(`Puntaje: ${this.score}`);
     this.timer = this.timer + 5;
     this.timerText.setText(`tiempo restante: ${this.timer}`);
     candy.destroy();

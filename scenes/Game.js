@@ -28,9 +28,14 @@ export default class Game extends Phaser.Scene {
     this.sky.setScale(3);
 
     this.platform = this.physics.add.staticGroup();
-    this.platform.create(400, 568, "platform").setScale(4).refreshBody();
+    this.platform.create(550, 550, "platform").refreshBody();
 
-    this.girl = this.physics.add.sprite(400, 300, "girl");
+    //this.sugar = this.physics.add.staticGroup();
+    //this.sugar.create(920, 80, "sugar");
+
+    this.add.sprite(920, 80, "sugarbar");
+
+    this.girl = this.physics.add.sprite(550, 300, "girl");
     this.girl.setCollideWorldBounds(true);
     this.girl.setGravity(0, 800);
 
@@ -187,7 +192,7 @@ export default class Game extends Phaser.Scene {
 
     const tipo = Phaser.Math.RND.pick(tipos);
     let collectable = this.collectable.create(
-      Phaser.Math.Between(10, 790),
+      Phaser.Math.Between(50, 1050),
       0,
       tipo
     );

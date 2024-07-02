@@ -42,8 +42,8 @@ export default class Menu extends Phaser.Scene {
     }
 
     Inicio(pointer) {
-        //if (this.pointer.isDown) {
+        
         this.scene.start("Game")
-        //}
+        
     }
 }

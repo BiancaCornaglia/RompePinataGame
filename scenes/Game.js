@@ -29,9 +29,6 @@ export default class Game extends Phaser.Scene {
     this.platform = this.physics.add.staticGroup();
     this.platform.create(550, 550, "platform").refreshBody();
 
-    //this.sugar = this.physics.add.staticGroup();
-    //this.sugar.create(920, 80, "sugar");
-
     this.add.sprite(920, 80, "sugarbar");
 
     this.girl = this.physics.add.sprite(550, 300, "girl");

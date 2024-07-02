@@ -25,7 +25,6 @@ export default class Game extends Phaser.Scene {
     // crear elementos
 
     this.sky = this.add.image(550, 300, "sky");
-    this.sky.setScale(3);
 
     this.platform = this.physics.add.staticGroup();
     this.platform.create(550, 550, "platform").refreshBody();
@@ -144,20 +143,25 @@ export default class Game extends Phaser.Scene {
     // movimiento personaje
     if (this.a.isDown) {
       this.girl.setVelocityX(-160);
-      this.girl.anims.play("walk", true);
-      this.girl.flipX = false;
     } else if (this.d.isDown) {
       this.girl.setVelocityX(160);
-      this.girl.anims.play("walk", true);
-      this.girl.flipX = true;
     } else {
       this.girl.setVelocityX(0);
     }
 
     if ((this.w.isDown && this.girl.body.touching.down) || (this.spacebar.isDown && this.girl.body.touching.down)) {
       this.girl.setVelocityY(-500);
-      this.girl.anims.play("jump", true);
+    }
+
+    if (this.a.isDown && this.girl.body.touching.down) {
+      this.girl.anims.play("walk", true);
       this.girl.flipX = false;
+    } else if (this.d.isDown && this.girl.body.touching.down) {
+      this.girl.anims.play("walk", true);
+      this.girl.flipX = true;
+    } else if (this.w.isDown) {
+      this.girl.anims.play("jump", true);
+      this.girl.flipX = true;
     }
 
     //se mueve la mira con el mouse

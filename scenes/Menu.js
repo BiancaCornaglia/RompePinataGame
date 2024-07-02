@@ -9,7 +9,7 @@ export default class Menu extends Phaser.Scene {
 
     preload() {
         this.load.image("inicio", " ./public/assets/Logo.png")
-        this.load.image("sky", "./public/assets/Cielo.webp");
+        this.load.image("sky", "./public/assets/sky.jpg");
         this.load.image("platform", "./public/assets/suelo.png");
         this.load.image("girl", "./public/assets/girl.png");
         //this.load.image("rainbow", "./public/assets/piñata01.png");
@@ -24,6 +24,7 @@ export default class Menu extends Phaser.Scene {
         this.load.image("num2", "./public/assets/pinata02.png");
         this.load.image("num3", "./public/assets/pinata03.png");
         this.load.image("sugar", "./public/assets/AZUCAR.png");
+        this.load.image("menu", "./public/assets/menu.jpg");
         this.load.spritesheet("sugarbar", "./public/assets/sugarbar.png", { frameWidth: 300, frameHeight: 100 });
         this.load.spritesheet("girlmove", "./public/assets/girlwalk.png", { frameWidth: 90, frameHeight: 90 });
         this.load.spritesheet("girljump", "./public/assets/girljump.png", { frameWidth: 105, frameHeight: 90 });
@@ -32,6 +33,9 @@ export default class Menu extends Phaser.Scene {
     create() {
         //this.pointer = this.input.activePointer;
         //this.Inicio()
+
+        this.menu = this.add.image(550, 300,"menu");
+
         this.anims.create({
             key: "walk",
             frames: this.anims.generateFrameNumbers("girlmove", { start: 0, end: 1 }),
@@ -46,14 +50,9 @@ export default class Menu extends Phaser.Scene {
             repeat: 0,
         });
 
-        this.inicio = this.add.image(550, 300, "inicio").setScale(0.2);
+        //this.inicio = this.add.image(550, 300, "inicio").setScale(0.2);
 
-        this.input.on("pointerdown", this.Inicio, this)
-
-        this.add.text(400, 400, "TOCA Y JUGA", {
-            fontSize: "45px",
-            color: "#fff"
-        })
+        this.input.on("pointerdown", this.Inicio, this);
     }
 
     Inicio(pointer) {

@@ -62,7 +62,7 @@ export default class Game extends Phaser.Scene {
       key: "jump",
       frames: this.anims.generateFrameNumbers("girljump", { start: 0, end: 1 }),
       frameRate: 10,
-      repeat: 0,
+      repeat: -1,
   });
 
     //this.cursor = this.input.keyboard.createCursorKeys();
@@ -171,7 +171,7 @@ export default class Game extends Phaser.Scene {
     } else if (this.d.isDown && this.girl.body.touching.down) {
       this.girl.anims.play("walk", true);
       this.girl.flipX = true;
-    } else if (this.w.isDown) {
+    } else if (this.w.isDown || this.spacebar.isDown) {
       this.girl.anims.play("jump", true);
       this.girl.flipX = true;
     }

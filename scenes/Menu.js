@@ -11,7 +11,7 @@ export default class Menu extends Phaser.Scene {
         //this.load.image("inicio", " ./public/assets/Logo.png")
         this.load.image("sky", "./public/assets/sky.jpg");
         this.load.image("platform", "./public/assets/suelo.png");
-        this.load.image("girl", "../public/assets/girl.png");
+        this.load.image("girl", "./public/assets/girl.png");
         //this.load.image("rainbow", "./public/assets/piñata01.png");
         //this.load.image("animal", "./public/assets/piñata02.png");
         //this.load.image("star", "./public/assets/piñata03.png");
@@ -26,8 +26,8 @@ export default class Menu extends Phaser.Scene {
         this.load.image("sugar", "./public/assets/AZUCAR.png");
         this.load.image("menu", "./public/assets/menu.jpg");
         this.load.spritesheet("sugarbar", "./public/assets/sugarbar.png", { frameWidth: 300, frameHeight: 100 });
-        this.load.spritesheet("girlmove", "../public/assets/Girlwalk.png", { frameWidth: 90, frameHeight: 90 });
-        this.load.spritesheet("girljump", "../public/assets/Girljump.png", { frameWidth: 105, frameHeight: 90 });
+        this.load.spritesheet("girlmove", "./public/assets/Girlwalk.png", { frameWidth: 90, frameHeight: 90 });
+        this.load.spritesheet("girljump", "./public/assets/Girljump.png", { frameWidth: 105, frameHeight: 90 });
     }
 
     create() {
@@ -35,20 +35,6 @@ export default class Menu extends Phaser.Scene {
         //this.Inicio()
 
         this.menu = this.add.image(550, 300,"menu");
-
-        this.anims.create({
-            key: "walk",
-            frames: this.anims.generateFrameNumbers("girlmove", { start: 0, end: 1 }),
-            frameRate: 10,
-            repeat: 0,
-        });
-
-        this.anims.create({
-            key: "jump",
-            frames: this.anims.generateFrameNumbers("girljump", { start: 0, end: 1 }),
-            frameRate: 10,
-            repeat: 0,
-        });
 
         //this.inicio = this.add.image(550, 300, "inicio").setScale(0.2);
 

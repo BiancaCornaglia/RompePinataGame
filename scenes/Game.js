@@ -53,6 +53,21 @@ export default class Game extends Phaser.Scene {
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
+    
+    this.anims.create({
+      key: "walk",
+      frames: this.anims.generateFrameNumbers("girlmove", { start: 0, end: 1 }),
+      frameRate: 10,
+      repeat: 0,
+  });
+
+  this.anims.create({
+      key: "jump",
+      frames: this.anims.generateFrameNumbers("girljump", { start: 0, end: 1 }),
+      frameRate: 10,
+      repeat: 0,
+  });
+
     //this.cursor = this.input.keyboard.createCursorKeys();
 
     this.time.addEvent({

@@ -26,8 +26,8 @@ export default class Menu extends Phaser.Scene {
         this.load.image("sugar", "./public/assets/AZUCAR.png");
         this.load.image("menu", "./public/assets/menu.jpg");
         this.load.spritesheet("sugarbar", "./public/assets/sugarbar.png", { frameWidth: 300, frameHeight: 100 });
-        this.load.spritesheet("girlmove", "./public/assets/Girlwalk.png", { frameWidth: 90, frameHeight: 90 });
-        this.load.spritesheet("girljump", "./public/assets/Girljump.png", { frameWidth: 105, frameHeight: 90 });
+        this.load.spritesheet("girlmove", "./public/Girlwalk.png", { frameWidth: 90, frameHeight: 90 });
+        this.load.spritesheet("girljump", "./public/Girljump.png", { frameWidth: 105, frameHeight: 90 });
     }
 
     create() {

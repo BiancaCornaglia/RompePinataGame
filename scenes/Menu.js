@@ -20,16 +20,31 @@ export default class Menu extends Phaser.Scene {
         this.load.image("candy1", "./public/assets/candy1.png");
         this.load.image("candy2", "./public/assets/candy2.png");
         this.load.image("candy3", "./public/assets/candy3.png");
-        this.load.image("num1", "./public/assets/num1.png");
-        this.load.image("num2", "./public/assets/num2.png");
-        this.load.image("num3", "./public/assets/num3.png");
+        this.load.image("num1", "./public/assets/pinata01.png");
+        this.load.image("num2", "./public/assets/pinata02.png");
+        this.load.image("num3", "./public/assets/pinata03.png");
         this.load.image("sugar", "./public/assets/AZUCAR.png");
         this.load.spritesheet("sugarbar", "./public/assets/sugarbar.png", { frameWidth: 300, frameHeight: 100 });
+        this.load.spritesheet("girlmove", "./public/assets/girlwalk.png", { frameWidth: 90, frameHeight: 90 });
+        this.load.spritesheet("girljump", "./public/assets/girljump.png", { frameWidth: 105, frameHeight: 90 });
     }
 
     create() {
         //this.pointer = this.input.activePointer;
         //this.Inicio()
+        this.anims.create({
+            key: "walk",
+            frames: this.anims.generateFrameNumbers("girlmove", { start: 0, end: 1 }),
+            frameRate: 10,
+            repeat: 0,
+        });
+
+        this.anims.create({
+            key: "jump",
+            frames: this.anims.generateFrameNumbers("girljump", { start: 0, end: 1 }),
+            frameRate: 10,
+            repeat: 0,
+        });
 
         this.inicio = this.add.image(550, 300, "inicio").setScale(0.2);
 

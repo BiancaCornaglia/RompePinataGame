@@ -41,7 +41,6 @@ export default class Game extends Phaser.Scene {
 
     this.mira = this.physics.add.sprite(400, 400, "mira");
     this.pointer = this.input.activePointer;
-    this.mira.setScale(0.2);
 
     this.physics.add.collider(this.girl, this.platform);
 
@@ -145,14 +144,20 @@ export default class Game extends Phaser.Scene {
     // movimiento personaje
     if (this.a.isDown) {
       this.girl.setVelocityX(-160);
+      this.girl.anims.play("walk", true);
+      this.girl.flipX = false;
     } else if (this.d.isDown) {
       this.girl.setVelocityX(160);
+      this.girl.anims.play("walk", true);
+      this.girl.flipX = true;
     } else {
       this.girl.setVelocityX(0);
     }
 
     if ((this.w.isDown && this.girl.body.touching.down) || (this.spacebar.isDown && this.girl.body.touching.down)) {
       this.girl.setVelocityY(-500);
+      this.girl.anims.play("jump", true);
+      this.girl.flipX = false;
     }
 
     //se mueve la mira con el mouse
@@ -242,7 +247,6 @@ export default class Game extends Phaser.Scene {
           const candyNum = Phaser.Math.RND.pick(candyList);
           let candy = this.candy.create(collectable.x, collectable.y, candyNum);
           candy.setVelocity(0, 350);
-          candy.setScale(0.2);
           candy.setData("points", this.candys[candyNum].points);
         }
       }

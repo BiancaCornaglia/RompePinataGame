@@ -43,6 +43,7 @@ export default class Game extends Phaser.Scene {
 
     this.candy = this.physics.add.group();
     this.candy.setDepth(2);
+
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -89,8 +90,12 @@ export default class Game extends Phaser.Scene {
     //  fill: "#fff",
     //});
 
-    this.scoreText = this.add.text(10, 50, `Puntaje: ${this.score}`);
-
+    this.scoreText = this.add.text(65, 80, this.score, {
+      fontSize: "25px",
+      color: "#ffffff",
+    }
+    );
+    this.scoreText.setDepth(6);
     //collider entre recolectables y personaje
     this.physics.add.overlap(
       this.girl,
@@ -148,8 +153,10 @@ export default class Game extends Phaser.Scene {
     this.cooldown = 0;
 
     this.sugarbar = this.add.sprite(920, 80, "sugarbar", 0);
-
     this.sugarbar.setDepth(5);
+
+    this.tablero = this.add.image(110, 75, "tablero");
+    this.tablero.setDepth(5);
   }
 
   update(deltatime) {
@@ -248,7 +255,7 @@ export default class Game extends Phaser.Scene {
 
       if (nombreFig == "boy") {
         this.score += points;
-        this.scoreText.setText(`Puntaje: ${this.score}`);
+        this.scoreText.setText(this.score);
         this.timer = this.timer - 10;
         //this.timerText.setText(`tiempo restante: ${this.timer}`);
         if (this.timer <= 0) {
@@ -346,7 +353,7 @@ export default class Game extends Phaser.Scene {
   GirlCandyCollision(timer, candy) {
     const points = candy.getData("points");
     this.score += points
-    this.scoreText.setText(`Puntaje: ${this.score}`);
+    this.scoreText.setText(this.score);
     this.timer = this.timer + 5;
     //this.timerText.setText(`tiempo restante: ${this.timer}`);
     candy.destroy();

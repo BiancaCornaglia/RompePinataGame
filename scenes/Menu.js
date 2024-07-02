@@ -11,7 +11,7 @@ export default class Menu extends Phaser.Scene {
         //this.load.image("inicio", " ./public/assets/Logo.png")
         this.load.image("sky", "./public/assets/sky.jpg");
         this.load.image("platform", "./public/assets/suelo.png");
-        this.load.image("girl", "./public/girl.png");
+        this.load.image("girl", "./public/Girl.png");
         //this.load.image("rainbow", "./public/assets/piñata01.png");
         //this.load.image("animal", "./public/assets/piñata02.png");
         //this.load.image("star", "./public/assets/piñata03.png");
@@ -42,7 +42,7 @@ export default class Menu extends Phaser.Scene {
     }
 
     Inicio(pointer) {
-        
+
         this.scene.start("Game")
         
     }

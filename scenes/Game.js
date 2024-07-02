@@ -29,8 +29,6 @@ export default class Game extends Phaser.Scene {
     this.platform = this.physics.add.staticGroup();
     this.platform.create(550, 550, "platform").refreshBody();
 
-    this.add.sprite(920, 80, "sugarbar");
-
     this.girl = this.physics.add.sprite(550, 300, "girl");
     this.girl.setCollideWorldBounds(true);
     this.girl.setGravity(0, 800);
@@ -41,24 +39,24 @@ export default class Game extends Phaser.Scene {
     this.physics.add.collider(this.girl, this.platform);
 
     this.collectable = this.physics.add.group();
+    this.collectable.setDepth(3);
 
     this.candy = this.physics.add.group();
-
+    this.candy.setDepth(2);
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-
     
     this.anims.create({
       key: "walk",
-      frames: this.anims.generateFrameNumbers("girlmove", { start: 0, end: 1 }),
+      frames: this.anims.generateFrameNumbers("girlmove", { start: 2, end: 3 }),
       frameRate: 10,
       repeat: 0,
   });
 
-  this.anims.create({
+    this.anims.create({
       key: "jump",
       frames: this.anims.generateFrameNumbers("girljump", { start: 0, end: 1 }),
       frameRate: 10,
@@ -86,10 +84,10 @@ export default class Game extends Phaser.Scene {
     });
 
     //agregar texto de timer
-    this.timerText = this.add.text(10, 10, `tiempo restante: ${this.timer}`, {
-      fontSize: "32px",
-      fill: "#fff",
-    });
+    //this.timerText = this.add.text(10, 10, `tiempo restante: ${this.timer}`, {
+    //  fontSize: "32px",
+    //  fill: "#fff",
+    //});
 
     this.scoreText = this.add.text(10, 50, `Puntaje: ${this.score}`);
 
@@ -148,6 +146,10 @@ export default class Game extends Phaser.Scene {
 
     this.cooling = false;
     this.cooldown = 0;
+
+    this.sugarbar = this.add.sprite(920, 80, "sugarbar", 0);
+
+    this.sugarbar.setDepth(5);
   }
 
   update(deltatime) {
@@ -173,7 +175,12 @@ export default class Game extends Phaser.Scene {
       this.girl.flipX = true;
     } else if (this.w.isDown || this.spacebar.isDown) {
       this.girl.anims.play("jump", true);
+    }
+
+    if (this.a.isDown) {
       this.girl.flipX = true;
+    } else if (this.d.isDown) {
+      this.girl.flipX = false;
     }
 
     //se mueve la mira con el mouse
@@ -194,7 +201,7 @@ export default class Game extends Phaser.Scene {
     }
     if (this.timer > 50) {
       this.timer = 50;
-      this.timerText.setText(`tiempo restante: ${this.timer}`);
+      //this.timerText.setText(`tiempo restante: ${this.timer}`);
     }
     if (this.gameOver) {
       this.scene.start("End", {
@@ -243,10 +250,10 @@ export default class Game extends Phaser.Scene {
         this.score += points;
         this.scoreText.setText(`Puntaje: ${this.score}`);
         this.timer = this.timer - 10;
-        this.timerText.setText(`tiempo restante: ${this.timer}`);
+        //this.timerText.setText(`tiempo restante: ${this.timer}`);
         if (this.timer <= 0) {
           this.timer = 0;
-          this.timerText.setText(`tiempo restante: ${this.timer}`);
+          //this.timerText.setText(`tiempo restante: ${this.timer}`);
           this.gameOver = true;
         }
       } else {
@@ -273,10 +280,33 @@ export default class Game extends Phaser.Scene {
 
   handlerTimer() {
     this.timer -= 1;
-    this.timerText.setText(`tiempo restante: ${this.timer}`);
+    //this.timerText.setText(`tiempo restante: ${this.timer}`);
     if (this.timer <= 0) {
       this.timer = 0;
       this.gameOver = true;
+    }
+    if (this.timer > 45) {
+      this.sugarbar.setFrame(0);
+    } else if (this.timer > 40 && this.timer < 45) {
+      this.sugarbar.setFrame(1);
+    } else if (this.timer > 35 && this.timer < 40) {
+      this.sugarbar.setFrame(2);
+    } else if (this.timer > 30 && this.timer < 35) {
+      this.sugarbar.setFrame(3);
+    } else if (this.timer > 25 && this.timer < 30) {
+      this.sugarbar.setFrame(4);
+    } else if (this.timer > 20 && this.timer < 25) {
+      this.sugarbar.setFrame(5);
+    } else if (this.timer > 15 && this.timer < 20) {
+      this.sugarbar.setFrame(6);
+    } else if (this.timer > 10 && this.timer < 15) {
+      this.sugarbar.setFrame(7);
+    } else if (this.timer > 5 && this.timer < 10) {
+      this.sugarbar.setFrame(8);
+    } else if (this.timer > 0 && this.timer < 5) {
+      this.sugarbar.setFrame(9);
+    } else if (this.timer <= 0 ) {
+      this.sugarbar.setFrame(10);
     }
   }
 
@@ -301,12 +331,12 @@ export default class Game extends Phaser.Scene {
     const nombreFig = collectable.getData("tipo");
     if (nombreFig == "boy" && !this.cooling) {
       this.timer = this.timer - 10;
-      this.timerText.setText(`tiempo restante: ${this.timer}`);
+      //this.timerText.setText(`tiempo restante: ${this.timer}`);
       this.cooling = true;
       if (this.timer <= 0) {
         this.gameOver = true;
         this.timer = 0;
-        this.timerText.setText(`tiempo restante: ${this.timer}`);
+        //this.timerText.setText(`tiempo restante: ${this.timer}`);
       }
     } else {
       //no pasa nada, ya los desaparece el piso
@@ -318,7 +348,7 @@ export default class Game extends Phaser.Scene {
     this.score += points
     this.scoreText.setText(`Puntaje: ${this.score}`);
     this.timer = this.timer + 5;
-    this.timerText.setText(`tiempo restante: ${this.timer}`);
+    //this.timerText.setText(`tiempo restante: ${this.timer}`);
     candy.destroy();
   }
 

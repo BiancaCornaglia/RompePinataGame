@@ -263,7 +263,6 @@ export default class Game extends Phaser.Scene {
           candy.setData("points", this.candys[candyNum].points);
         }
       }
-
       this.isClicked = true;
     }
   }

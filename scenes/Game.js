@@ -205,7 +205,7 @@ export default class Game extends Phaser.Scene {
       });
     }
   }
-
+  
   onSecond() {
     if (this.gameOver) {
       return;

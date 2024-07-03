@@ -31,9 +31,10 @@ export default class Menu extends Phaser.Scene {
         this.menu = this.add.image(550, 300, "menu");
         this.input.on("pointerdown", this.Inicio, this);
 
-        let music = this.sound.add("backgroundmusic");
-        music.play({
-            loop: true
+        this.backgroundmusic = this.sound.add("backgroundmusic");
+        this.backgroundmusic.play({
+            loop: true,
+            volume: 0.2
         })
     }
 

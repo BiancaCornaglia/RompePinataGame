@@ -24,11 +24,17 @@ export default class Menu extends Phaser.Scene {
         this.load.spritesheet("sugarbar", "./public/assets/sugarbar.png", { frameWidth: 300, frameHeight: 100 });
         this.load.spritesheet("girlmove", "./public/Girlwalk.png", { frameWidth: 90, frameHeight: 90 });
         this.load.spritesheet("girljump", "./public/Girljump.png", { frameWidth: 105, frameHeight: 90 });
+        this.load.audio("backgroundmusic", "./public/cancionrp.mp3");
     }
 
     create() {
         this.menu = this.add.image(550, 300, "menu");
         this.input.on("pointerdown", this.Inicio, this);
+
+        let music = this.sound.add("backgroundmusic");
+        music.play({
+            loop: true
+        })
     }
 
     Inicio(pointer) {

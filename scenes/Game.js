@@ -22,8 +22,7 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    // crear elementos
-
+    //elementos
     this.sky = this.add.image(550, 300, "sky");
 
     this.platform = this.physics.add.staticGroup();
@@ -44,51 +43,11 @@ export default class Game extends Phaser.Scene {
     this.candy = this.physics.add.group();
     this.candy.setDepth(2);
 
-    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-    
-    this.anims.create({
-      key: "walk",
-      frames: this.anims.generateFrameNumbers("girlmove", { start: 2, end: 3 }),
-      frameRate: 10,
-      repeat: 0,
-  });
+    this.sugarbar = this.add.sprite(920, 80, "sugarbar", 0);
+    this.sugarbar.setDepth(5);
 
-    this.anims.create({
-      key: "jump",
-      frames: this.anims.generateFrameNumbers("girljump", { start: 0, end: 1 }),
-      frameRate: 10,
-      repeat: -1,
-  });
-
-    //this.cursor = this.input.keyboard.createCursorKeys();
-
-    this.time.addEvent({
-      delay: 1000,
-      callback: this.onSecond,
-      callbackScope: this,
-      loop: true,
-    });
-
-    //reconocimiento del mov del mouse
-    this.pointer = this.input.activePointer;
-
-    // evento 1 segundo
-    this.time.addEvent({
-      delay: 1000,
-      callback: this.handlerTimer,
-      callbackScope: this,
-      loop: true,
-    });
-
-    //agregar texto de timer
-    //this.timerText = this.add.text(10, 10, `tiempo restante: ${this.timer}`, {
-    //  fontSize: "32px",
-    //  fill: "#fff",
-    //});
+    this.tablero = this.add.image(110, 75, "tablero");
+    this.tablero.setDepth(5);
 
     this.scoreText = this.add.text(65, 80, this.score, {
       fontSize: "25px",
@@ -96,7 +55,46 @@ export default class Game extends Phaser.Scene {
     }
     );
     this.scoreText.setDepth(6);
-    //collider entre recolectables y personaje
+
+    //movimiento
+    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.pointer = this.input.activePointer;
+
+    //animaciones
+    this.anims.create({
+      key: "walk",
+      frames: this.anims.generateFrameNumbers("girlmove", { start: 2, end: 3 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: "jump",
+      frames: this.anims.generateFrameNumbers("girljump", { start: 0, end: 1 }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    // evento 1 segundo
+    this.time.addEvent({
+      delay: 1000,
+      callback: this.onSecond,
+      callbackScope: this,
+      loop: true,
+    });
+
+    this.time.addEvent({
+      delay: 1000,
+      callback: this.handlerTimer,
+      callbackScope: this,
+      loop: true,
+    });
+
+    //colliders
     this.physics.add.overlap(
       this.girl,
       this.collectable,
@@ -113,7 +111,6 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    //overlap entre collectable y mira
     this.physics.add.overlap(
       this.mira,
       this.collectable,
@@ -122,7 +119,6 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    //overlap entre caramelos y nenes
     this.physics.add.overlap(
       this.candy,
       this.collectable,
@@ -131,7 +127,6 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    //collider entre recolectables y plataformas
     this.physics.add.collider(
       this.collectable,
       this.platform,
@@ -140,7 +135,6 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    //collider entre candy y plataformas
     this.physics.add.collider(
       this.candy,
       this.platform,
@@ -151,17 +145,10 @@ export default class Game extends Phaser.Scene {
 
     this.cooling = false;
     this.cooldown = 0;
-
-    this.sugarbar = this.add.sprite(920, 80, "sugarbar", 0);
-    this.sugarbar.setDepth(5);
-
-    this.tablero = this.add.image(110, 75, "tablero");
-    this.tablero.setDepth(5);
   }
 
   update(deltatime) {
-
-    // movimiento personaje
+    //movimiento personaje
     if (this.a.isDown) {
       this.girl.setVelocityX(-160);
     } else if (this.d.isDown) {
@@ -190,7 +177,7 @@ export default class Game extends Phaser.Scene {
       this.girl.flipX = false;
     }
 
-    //se mueve la mira con el mouse
+    //movimiento mira
     this.mira.x = this.pointer.x;
     this.mira.y = this.pointer.y;
 
@@ -206,9 +193,10 @@ export default class Game extends Phaser.Scene {
         this.cooldown = 0;
       }
     }
+
     if (this.timer > 50) {
       this.timer = 50;
-      //this.timerText.setText(`tiempo restante: ${this.timer}`);
+
     }
     if (this.gameOver) {
       this.scene.start("End", {
@@ -233,9 +221,6 @@ export default class Game extends Phaser.Scene {
     );
     collectable.setVelocity(0, 200);
 
-    //asignar rebote: busca un numero entre 0.4 y 0.8
-    const rebote = Phaser.Math.FloatBetween(0.4, 0.8);
-
     //set data
     collectable.setData("points", this.shapes[tipo].points);
     collectable.setData("tipo", tipo);
@@ -257,10 +242,8 @@ export default class Game extends Phaser.Scene {
         this.score += points;
         this.scoreText.setText(this.score);
         this.timer = this.timer - 10;
-        //this.timerText.setText(`tiempo restante: ${this.timer}`);
         if (this.timer <= 0) {
           this.timer = 0;
-          //this.timerText.setText(`tiempo restante: ${this.timer}`);
           this.gameOver = true;
         }
       } else {
@@ -287,7 +270,6 @@ export default class Game extends Phaser.Scene {
 
   handlerTimer() {
     this.timer -= 1;
-    //this.timerText.setText(`tiempo restante: ${this.timer}`);
     if (this.timer <= 0) {
       this.timer = 0;
       this.gameOver = true;
@@ -312,7 +294,7 @@ export default class Game extends Phaser.Scene {
       this.sugarbar.setFrame(8);
     } else if (this.timer > 0 && this.timer < 5) {
       this.sugarbar.setFrame(9);
-    } else if (this.timer <= 0 ) {
+    } else if (this.timer <= 0) {
       this.sugarbar.setFrame(10);
     }
   }
@@ -338,15 +320,12 @@ export default class Game extends Phaser.Scene {
     const nombreFig = collectable.getData("tipo");
     if (nombreFig == "boy" && !this.cooling) {
       this.timer = this.timer - 10;
-      //this.timerText.setText(`tiempo restante: ${this.timer}`);
       this.cooling = true;
       if (this.timer <= 0) {
         this.gameOver = true;
         this.timer = 0;
-        //this.timerText.setText(`tiempo restante: ${this.timer}`);
       }
     } else {
-      //no pasa nada, ya los desaparece el piso
     }
   }
 
@@ -355,7 +334,6 @@ export default class Game extends Phaser.Scene {
     this.score += points
     this.scoreText.setText(this.score);
     this.timer = this.timer + 5;
-    //this.timerText.setText(`tiempo restante: ${this.timer}`);
     candy.destroy();
   }
 

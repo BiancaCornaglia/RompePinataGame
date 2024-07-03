@@ -18,8 +18,8 @@ export default class Menu extends Phaser.Scene {
         this.load.image("num1", "./public/assets/pinata01.png");
         this.load.image("num2", "./public/assets/pinata02.png");
         this.load.image("num3", "./public/assets/pinata03.png");
-        this.load.image("menu", "./public/assets/menuRP.jpg");
-        this.load.image("gameover", "./public/assets/gameoverRP.jpg");
+        this.load.image("menu", "./public/assets/menurp.jpg");
+        this.load.image("gameover", "./public/assets/gameoverrp.jpg");
         this.load.image("tablero", "./public/assets/puntos.png");
         this.load.spritesheet("sugarbar", "./public/assets/sugarbar.png", { frameWidth: 300, frameHeight: 100 });
         this.load.spritesheet("girlmove", "./public/Girlwalk.png", { frameWidth: 90, frameHeight: 90 });

@@ -8,7 +8,6 @@ export default class End extends Phaser.Scene {
     }
     create() {
         this.menu = this.add.image(550, 300, "gameover");
-
         this.add.text(500, 330, this.score, {
             fontSize: "40px",
             color: "#ffffff",

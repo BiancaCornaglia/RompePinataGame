@@ -29,7 +29,6 @@ export default class Menu extends Phaser.Scene {
 
     create() {
         this.menu = this.add.image(550, 300, "menu");
-
         this.input.on("pointerdown", this.Inicio, this);
     }
 

@@ -78,6 +78,20 @@ export default class Game extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
+    
+    this.anims.create({
+      key: "fall",
+      frames: this.anims.generateFrameNumbers("boyMove", { star: 0, end: 1 }),
+      frameRate: 10,
+      repeat: 0,
+    });
+    
+    this.anims.create({
+      key: "run",
+      frames: this.anims.generateFrameNumbers("boyMove", { start: 2, end: 3 }),
+      frameRate: 9,
+      repeat: -1,
+    })
 
     // evento 1 segundo
     this.time.addEvent({
@@ -303,13 +317,27 @@ export default class Game extends Phaser.Scene {
     let points = collectable.getData("points");
     const nombreFig = collectable.getData("tipo");
     if (nombreFig == "boy") {
+
+      collectable.anims.play("fall", true),
+
+      collectable.once( 'animationcomplete', () => {
       if (collectable.x > this.girl.x) {
         collectable.setVelocityX(-260);
+
+        collectable.anims.play("run", true);
+        collectable.flipX = false;
+
+
         collectable = !this.collectable;
       } else {
         collectable.setVelocityX(260);
+
+        collectable.anims.play("run", true);
+
+        collectable.flipX = true;
+
         collectable = !this.collectable;
-      }
+      }})
     } else {
       collectable.destroy();
     }

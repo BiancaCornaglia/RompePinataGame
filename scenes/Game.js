@@ -33,7 +33,6 @@ export default class Game extends Phaser.Scene {
     this.girl.setGravity(0, 800);
 
     this.mira = this.physics.add.sprite(400, 400, "mira");
-    this.pointer = this.input.activePointer;
 
     this.physics.add.collider(this.girl, this.platform);
 
@@ -42,6 +41,8 @@ export default class Game extends Phaser.Scene {
 
     this.candy = this.physics.add.group();
     this.candy.setDepth(2);
+
+    this.physics.add.collider(this.candy, this.platform);
 
     this.sugarbar = this.add.sprite(920, 80, "sugarbar", 0);
     this.sugarbar.setDepth(5);
@@ -149,14 +150,6 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    this.physics.add.collider(
-      this.candy,
-      this.platform,
-      this.CandyPerreo,
-      null,
-      this
-    );
-
     this.cooling = false;
     this.cooldown = 0;
   }
@@ -219,7 +212,7 @@ export default class Game extends Phaser.Scene {
       });
     }
   }
-  
+
   onSecond() {
     if (this.gameOver) {
       return;
@@ -313,64 +306,60 @@ export default class Game extends Phaser.Scene {
   }
 
   onRecolectableBounced(collectable, platform) {
-    console.log("recolectable rebote");
-    let points = collectable.getData("points");
     const nombreFig = collectable.getData("tipo");
     if (nombreFig == "boy") {
 
       collectable.anims.play("fall", true),
 
-      collectable.once( 'animationcomplete', () => {
-      if (collectable.x > this.girl.x) {
-        collectable.setVelocityX(-260);
+        collectable.once('animationcomplete', () => {
+          if (collectable.x > this.girl.x) {
+            collectable.setVelocityX(-260);
 
-        collectable.anims.play("run", true);
-        collectable.flipX = false;
+            collectable.anims.play("run", true);
+            collectable.flipX = false;
 
+            collectable = !this.collectable;
+          } else {
+            collectable.setVelocityX(260);
 
-        collectable = !this.collectable;
+            collectable.anims.play("run", true);
+            collectable.flipX = true;
+            
+            collectable = !this.collectable;
+          }
+        })
+      
+        } else {
+          collectable.destroy();
+        }
+  }
+
+    onGirlCollision(timer, collectable) {
+      const nombreFig = collectable.getData("tipo");
+      if (nombreFig == "boy" && !this.cooling) {
+        this.timer = this.timer - 10;
+        this.cooling = true;
+        if (this.timer <= 0) {
+          this.gameOver = true;
+          this.timer = 0;
+        }
       } else {
-        collectable.setVelocityX(260);
-
-        collectable.anims.play("run", true);
-
-        collectable.flipX = true;
-
-        collectable = !this.collectable;
-      }})
-    } else {
-      collectable.destroy();
-    }
-  }
-
-  onGirlCollision(timer, collectable) {
-    const nombreFig = collectable.getData("tipo");
-    if (nombreFig == "boy" && !this.cooling) {
-      this.timer = this.timer - 10;
-      this.cooling = true;
-      if (this.timer <= 0) {
-        this.gameOver = true;
-        this.timer = 0;
       }
-    } else {
     }
-  }
 
-  GirlCandyCollision(timer, candy) {
-    const points = candy.getData("points");
-    this.score += points
-    this.scoreText.setText(this.score);
-    this.timer = this.timer + 5;
-    candy.destroy();
-  }
-
-  boyCollectsCandy(candy, collectable) {
-    const nombreFig = collectable.getData("tipo");
-    if (nombreFig == "boy") {
+    GirlCandyCollision(timer, candy) {
+      const points = candy.getData("points");
+      this.score += points
+      this.scoreText.setText(this.score);
+      this.timer = this.timer + 5;
       candy.destroy();
-    } else {
+    }
+
+    boyCollectsCandy(candy, collectable) {
+      const nombreFig = collectable.getData("tipo");
+      if (nombreFig == "boy") {
+        candy.destroy();
+      } else {
+      }
     }
   }
-
-  CandyPerreo() { }
-}
